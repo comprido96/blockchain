@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CompriAuction {
-    /*
     IERC721 public nft;
     IERC20 public currency;
     uint public nftId;
@@ -20,20 +19,9 @@ contract CompriAuction {
     address public highestBidder;
     uint public highestBid;
     mapping(address => uint) public bids;
-    */
 
-    mapping(address => mapping(uint => bool)) nfts;
+    event DepositedToken(address from, address to, uint256 nftId);
 
-    struct NFT {
-        address nftAddress;
-        uint nftId;
-        address owner;
-        bool listed;
-    }
-
-    event DepositedToken(address indexed operator, address from, uint256 nftId);
-
-    /*
     event ListedTokenOnAuction(
         IERC20 currency,
         uint256 tokenId,
@@ -53,30 +41,22 @@ contract CompriAuction {
         address winner,
         uint256 price
     );
-    */
 
-    /*
     constructor(address _nft, uint _nftId) {
         nft = IERC721(_nft);
         nft.safeTransferFrom(msg.sender, address(this), _nftId);
         nftId = _nftId;
         owner = msg.sender;
     }
-    */
-
-    constructor() {}
 
     function onERC721Received(
         address _operator,
         address _from,
-        uint256 _tokenId,
-        bytes calldata _data
+        uint256 _tokenId
     ) external returns (bytes4) {
-        require(IERC721(_operator).ownerOf(_tokenId) == address(this));
+        require(nft.ownerOf(_tokenId) == address(this));
 
-        nfts[_operator][_tokenId] = true;
-
-        emit DepositedToken(_operator, _from, _tokenId);
+        emit DepositedToken(_from, _operator, _tokenId);
 
         return this.onERC721Received.selector;
     }
@@ -112,7 +92,7 @@ contract CompriAuction {
         address _bidder = msg.sender;
 
         if (_bid > highestBid) {
-            currency.transferFrom(msg.sender, address(this), _bid);
+            currency.transfer(address(this), _bid);
             bids[_bidder] += _bid;
 
             highestBid = _bid;
@@ -154,12 +134,12 @@ contract CompriAuction {
         highestBidder = address(0);
     }
 
-    function withdrawNFT() public {
+    function withdrawNFT() external {
         require(!started, "Cannot withdraw token listed on auction.");
 
         require(owner == msg.sender, "Only owner can withdraw the token.");
 
-        //this.approveTokenTransfer(msg.sender);
+        this.approveTokenTransfer(msg.sender);
 
         nft.safeTransferFrom(address(this), msg.sender, nftId);
     }
