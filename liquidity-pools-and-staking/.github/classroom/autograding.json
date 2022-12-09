@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "hardhat test",
+      "setup": "npm install hardhat",
+      "run": "REPORT_GAS=true npx hardhat test",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": null
+    },
+    {
+      "name": "hardhat coverage",
+      "setup": "",
+      "run": "npx hardhat coverage",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    }
+  ]
+}

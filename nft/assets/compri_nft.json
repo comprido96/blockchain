@@ -1,0 +1,16 @@
+{
+    "tokenId": 0,
+    "name": "Compri NFT",
+    "description": "Compri NFT is not hot right now, but still",
+    "image": "https://compri-nft.infura-ipfs.io/ipfs/QmVNtysjiQRG9yGLuKJrsuMjvzru9G5F5Cjjp2MpHeo5f4",
+    "attributes": [
+        {
+            "trait_type": "tarma",
+            "value": "So Heavy"
+        },
+        {
+            "trait_type": "machine gun",
+            "value": "10"
+        }
+    ]
+}
